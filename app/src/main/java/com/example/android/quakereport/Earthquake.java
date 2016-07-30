@@ -5,7 +5,7 @@ package com.example.android.quakereport;
  */
 public class Earthquake {
     // Stores the magnitude of the earthquake
-    private float mMagnitude;
+    private double mMagnitude;
     // Stores the location of the earthquake
     private String mLocation;
     // Stores the date of the earthquake
@@ -18,7 +18,7 @@ public class Earthquake {
      * @param location  is the new earthquake
      * @param date      is the date of the new earthquake
      */
-    public Earthquake(float magnitude, String location, String date) {
+    public Earthquake(double magnitude, String location, String date) {
         this.setMagnitude(magnitude);
         this.setLocation(location);
         this.setDate(date);
@@ -29,7 +29,7 @@ public class Earthquake {
      *
      * @return the magnitude
      */
-    public float getMagnitude() {
+    public double getMagnitude() {
         return this.mMagnitude;
     }
 
@@ -38,7 +38,7 @@ public class Earthquake {
      *
      * @param magnitude is the new value of the magnitude
      */
-    public void setMagnitude(float magnitude) {
+    public void setMagnitude(double magnitude) {
         this.mMagnitude = magnitude;
     }
 
