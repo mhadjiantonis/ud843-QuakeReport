@@ -45,7 +45,10 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         // Find the TextView items in the view
         TextView magnitudeTextView = (TextView) listItemView.findViewById(R.id.magnitude_text);
-        TextView locationTextView = (TextView) listItemView.findViewById(R.id.location_text);
+        TextView locationOffsetTextView = (TextView) listItemView.findViewById(
+                R.id.location_offset_text);
+        TextView primaryLocationTextView = (TextView) listItemView.findViewById(
+                R.id.primary_location_text);
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date_text);
         TextView timeTextView = (TextView) listItemView.findViewById(R.id.time_text);
 
@@ -59,9 +62,23 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         String dateToDisplay = dateFormatter.format(dateObject);
         String timeToDisplay = timeFormatter.format(dateObject);
 
+        //Format the location to be displayed
+        String location = earthquake.getLocation();
+        String primaryLocation;
+        String locationOffset;
+        if (location.contains(" of ")) {
+            int indexToCut = location.indexOf(" of ") + 4;
+            locationOffset = location.substring(0, indexToCut);
+            primaryLocation = location.substring(indexToCut, location.length());
+        } else {
+            locationOffset = "Near the";
+            primaryLocation = location;
+        }
+
         // Set the text in the TextView items
         magnitudeTextView.setText(String.valueOf(earthquake.getMagnitude()));
-        locationTextView.setText(earthquake.getLocation());
+        locationOffsetTextView.setText(locationOffset);
+        primaryLocationTextView.setText(primaryLocation);
         dateTextView.setText(dateToDisplay);
         timeTextView.setText(timeToDisplay);
 

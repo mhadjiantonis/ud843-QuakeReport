@@ -14,14 +14,29 @@
         android:padding="16dp"
         tools:text="4.5" />
 
-    <TextView
-        android:id="@+id/location_text"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:padding="16dp"
-        tools:text="London" />
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/location_offset_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            tools:text="2km W of " />
+
+        <TextView
+            android:id="@+id/primary_location_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            tools:text="London" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
