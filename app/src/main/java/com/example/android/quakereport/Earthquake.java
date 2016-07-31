@@ -10,6 +10,8 @@ public class Earthquake {
     private String mLocation;
     // Stores the time the earthquake happened in ms from the start of UNIX epoch time
     private long mTime;
+    // Stores the url related to an earthquake event
+    private String mUrl;
 
     /**
      * Constructor for the Earthquake class
@@ -17,11 +19,13 @@ public class Earthquake {
      * @param magnitude is the magnitude if the new earthquake
      * @param location  is the new earthquake
      * @param time      is the time of the new earthquake
+     * @param url       is the url related to the ne earthquake
      */
-    public Earthquake(double magnitude, String location, long time) {
+    public Earthquake(double magnitude, String location, long time, String url) {
         this.setMagnitude(magnitude);
         this.setLocation(location);
         this.setTime(time);
+        this.setUrl(url);
     }
 
     /**
@@ -78,9 +82,17 @@ public class Earthquake {
         this.mTime = date;
     }
 
+    public String getUrl() {
+        return this.mUrl;
+    }
+
+    public void setUrl(String url) {
+        this.mUrl = url;
+    }
+
     @Override
     public String toString() {
         return "Earthquake of magnitude " + this.getMagnitude() + " at " + this.getLocation()
-                + " in " + this.getTime();
+                + " in " + this.getTime() + ".  Url: " + this.getUrl();
     }
 }
