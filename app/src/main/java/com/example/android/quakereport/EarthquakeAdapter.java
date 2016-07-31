@@ -15,6 +15,9 @@ import java.util.Date;
  * Custom adapter for list of Earthquake objects
  */
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
+    // Used to separate the location when formatting
+    private static final String LOCATION_SEPARATOR = " of ";
+
     /**
      * Constructor for the adapter
      *
@@ -55,7 +58,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         // Find the earthquake to be displayed
         Earthquake earthquake = this.getItem(position);
 
-        //Format the time to be diplayed
+        //Format the time to be displayed
         Date dateObject = new Date(earthquake.getTime());
         SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
         SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm aa");
@@ -66,12 +69,12 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         String location = earthquake.getLocation();
         String primaryLocation;
         String locationOffset;
-        if (location.contains(" of ")) {
-            int indexToCut = location.indexOf(" of ") + 4;
+        if (location.contains(LOCATION_SEPARATOR)) {
+            int indexToCut = location.indexOf(LOCATION_SEPARATOR) + 4;
             locationOffset = location.substring(0, indexToCut);
             primaryLocation = location.substring(indexToCut, location.length());
         } else {
-            locationOffset = "Near the";
+            locationOffset = getContext().getString(R.string.near_the);
             primaryLocation = location;
         }
 
