@@ -1,6 +1,8 @@
 package com.example.android.quakereport;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +93,50 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         dateTextView.setText(dateToDisplay);
         timeTextView.setText(timeToDisplay);
 
+        // Change the color of the magnitude circle
+        GradientDrawable magnitudeCircle = (GradientDrawable) magnitudeTextView.getBackground();
+        magnitudeCircle.setColor(getMagnitudeColor(earthquake.getMagnitude()));
+
         return listItemView;
 
     }
+
+    private int getMagnitudeColor(double magnitude) {
+        int intMagnitude = (int) magnitude;
+        int color;
+        switch (intMagnitude) {
+            case 0:
+            case 1:
+                color = R.color.magnitude1;
+                break;
+            case 2:
+                color = R.color.magnitude2;
+                break;
+            case 3:
+                color = R.color.magnitude3;
+                break;
+            case 4:
+                color = R.color.magnitude4;
+                break;
+            case 5:
+                color = R.color.magnitude5;
+                break;
+            case 6:
+                color = R.color.magnitude6;
+                break;
+            case 7:
+                color = R.color.magnitude7;
+                break;
+            case 8:
+                color = R.color.magnitude8;
+                break;
+            case 9:
+                color = R.color.magnitude9;
+                break;
+            default:
+                color = R.color.magnitude10plus;
+        }
+        return ContextCompat.getColor(getContext(), color);
+    }
+
 }
