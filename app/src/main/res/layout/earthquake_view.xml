@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -10,14 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_weight="0"
-        android:padding="16dp" />
+        android:padding="16dp"
+        tools:text="4.5" />
 
     <TextView
         android:id="@+id/location_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="16dp" />
+        android:padding="16dp"
+        tools:text="London" />
 
     <TextView
         android:id="@+id/date_text"
@@ -25,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_weight="0"
-        android:padding="16dp" />
+        android:padding="16dp"
+        tools:text="Aug 27, 2012" />
 
 </LinearLayout>
