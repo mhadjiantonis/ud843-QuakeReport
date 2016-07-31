@@ -52,7 +52,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         // Set the text in the TextView items
         magnitudeTextView.setText(String.valueOf(earthquake.getMagnitude()));
         locationTextView.setText(earthquake.getLocation());
-        dateTextView.setText(earthquake.getDate());
+        dateTextView.setText(String.valueOf(earthquake.getTime()));
 
         return listItemView;
 

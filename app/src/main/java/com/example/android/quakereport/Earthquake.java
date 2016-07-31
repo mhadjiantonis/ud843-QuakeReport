@@ -8,20 +8,20 @@ public class Earthquake {
     private double mMagnitude;
     // Stores the location of the earthquake
     private String mLocation;
-    // Stores the date of the earthquake
-    private String mDate;
+    // Stores the time the earthquake happened in ms from the start of UNIX epoch time
+    private long mTime;
 
     /**
      * Constructor for the Earthquake class
      *
      * @param magnitude is the magnitude if the new earthquake
      * @param location  is the new earthquake
-     * @param date      is the date of the new earthquake
+     * @param time      is the time of the new earthquake
      */
-    public Earthquake(double magnitude, String location, String date) {
+    public Earthquake(double magnitude, String location, long time) {
         this.setMagnitude(magnitude);
         this.setLocation(location);
-        this.setDate(date);
+        this.setTime(time);
     }
 
     /**
@@ -65,8 +65,8 @@ public class Earthquake {
      *
      * @return the date
      */
-    public String getDate() {
-        return this.mDate;
+    public long getTime() {
+        return this.mTime;
     }
 
     /**
@@ -74,13 +74,13 @@ public class Earthquake {
      *
      * @param date is the new date
      */
-    public void setDate(String date) {
-        this.mDate = date;
+    public void setTime(long date) {
+        this.mTime = date;
     }
 
     @Override
     public String toString() {
         return "Earthquake of magnitude " + this.getMagnitude() + " at " + this.getLocation()
-                + " in " + this.getDate();
+                + " in " + this.getTime();
     }
 }
