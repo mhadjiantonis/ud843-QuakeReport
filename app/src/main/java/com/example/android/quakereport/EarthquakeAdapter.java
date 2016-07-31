@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Custom adapter for list of Earthquake objects
@@ -45,14 +47,23 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         TextView magnitudeTextView = (TextView) listItemView.findViewById(R.id.magnitude_text);
         TextView locationTextView = (TextView) listItemView.findViewById(R.id.location_text);
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date_text);
+        TextView timeTextView = (TextView) listItemView.findViewById(R.id.time_text);
 
         // Find the earthquake to be displayed
         Earthquake earthquake = this.getItem(position);
 
+        //Format the time to be diplayed
+        Date dateObject = new Date(earthquake.getTime());
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM dd, yyyy");
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm aa");
+        String dateToDisplay = dateFormatter.format(dateObject);
+        String timeToDisplay = timeFormatter.format(dateObject);
+
         // Set the text in the TextView items
         magnitudeTextView.setText(String.valueOf(earthquake.getMagnitude()));
         locationTextView.setText(earthquake.getLocation());
-        dateTextView.setText(String.valueOf(earthquake.getTime()));
+        dateTextView.setText(dateToDisplay);
+        timeTextView.setText(timeToDisplay);
 
         return listItemView;
 
