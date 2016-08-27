@@ -18,12 +18,16 @@ package com.example.android.quakereport;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +39,18 @@ public class EarthquakeActivity extends AppCompatActivity
     private static final String QUERY_URL_STRING =
             "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
 
-    EarthquakeAdapter adapter = null;
+    private EarthquakeAdapter adapter = null;
+    private TextView noEarthquakesFoundText;
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
+
+        // FInd the progress bar
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
@@ -66,7 +76,18 @@ public class EarthquakeActivity extends AppCompatActivity
             }
         });
 
-        getLoaderManager().initLoader(0, null, this);
+        // Set EmptyView for the ListView
+        noEarthquakesFoundText = (TextView) findViewById(R.id.no_earthquakes_found_text);
+        earthquakeListView.setEmptyView(noEarthquakesFoundText);
+
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = connMgr.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            getLoaderManager().initLoader(0, null, this);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            noEarthquakesFoundText.setText(R.string.no_internet_connection);
+        }
     }
 
     @Override
@@ -80,6 +101,8 @@ public class EarthquakeActivity extends AppCompatActivity
             adapter.clear();
             adapter.addAll(data);
         }
+        progressBar.setVisibility(View.GONE);
+        noEarthquakesFoundText.setText(R.string.no_earthquakes_found);
     }
 
     @Override
