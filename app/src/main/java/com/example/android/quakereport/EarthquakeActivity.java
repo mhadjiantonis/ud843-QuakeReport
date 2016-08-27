@@ -15,7 +15,9 @@
  */
 package com.example.android.quakereport;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,24 +26,27 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<List<Earthquake>> {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
+    private static final String QUERY_URL_STRING =
+            "http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+
+    EarthquakeAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        // Get earthquakes list
-        ArrayList<Earthquake> earthquakes = QueryUtils.extractEarthquakes();
-
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
         // Create a new {@link ArrayAdapter} of earthquakes
-        final EarthquakeAdapter adapter = new EarthquakeAdapter(this, earthquakes);
+        adapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
 
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
@@ -60,5 +65,26 @@ public class EarthquakeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        getLoaderManager().initLoader(0, null, this);
     }
+
+    @Override
+    public android.content.Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
+        return new EarthquakeLoader(this, QUERY_URL_STRING);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> data) {
+        if (data != null && !data.isEmpty()) {
+            adapter.clear();
+            adapter.addAll(data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Earthquake>> loader) {
+        adapter.clear();
+    }
+
 }

@@ -6,6 +6,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 /**
@@ -39,7 +47,7 @@ public final class QueryUtils {
      * Return a list of {@link Earthquake} objects that has been built up from
      * parsing a JSON response.
      */
-    public static ArrayList<Earthquake> extractEarthquakes() {
+    public static ArrayList<Earthquake> extractEarthquakes(String jsonResponse) {
 
         // Create an empty ArrayList that we can start adding earthquakes to
         ArrayList<Earthquake> earthquakes = new ArrayList<>();
@@ -49,7 +57,7 @@ public final class QueryUtils {
         // Catch the exception so the app doesn't crash, and print the error message to the logs.
         try {
             // Parse the new JSON object
-            JSONObject rootJSON = new JSONObject(SAMPLE_JSON_RESPONSE);
+            JSONObject rootJSON = new JSONObject(jsonResponse);
             // Isolate the "features" array
             JSONArray featuresArray = rootJSON.optJSONArray("features");
 
@@ -77,4 +85,87 @@ public final class QueryUtils {
         return earthquakes;
     }
 
+    /**
+     * Creates a URL object that will be used in the HTTP connection
+     *
+     * @param urlString the website of the URL
+     * @return the URL object
+     */
+    public static URL makeURL(String urlString) {
+        URL queryUrl = null;
+        try {
+            queryUrl = new URL(urlString);
+        } catch (MalformedURLException e) {
+            Log.e(EarthquakeActivity.LOG_TAG, "Error while creating URL", e);
+        }
+        return queryUrl;
+    }
+
+    /**
+     * Reads a string response from the given {@link InputStream}
+     *
+     * @param stream The stream from where the output will be read from
+     * @return the contents of the {@link InputStream} as a {@link String} object
+     * @throws IOException
+     */
+    private static String readFromStream(InputStream stream) throws IOException {
+        StringBuilder output = new StringBuilder();
+
+        if (stream != null) {
+            InputStreamReader streamReader = new InputStreamReader(stream, Charset.forName("UTF-8"));
+            BufferedReader bufferedReader = new BufferedReader(streamReader);
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = bufferedReader.readLine();
+            }
+        }
+        return output.toString();
+    }
+
+    /**
+     * Makes an {@link HttpURLConnection} to the given {@link URL} and returns the response as a
+     * {@link String} object
+     *
+     * @param queryURL the URL to be used for the {@link HttpURLConnection}
+     * @return the response of the connection
+     * @throws IOException
+     */
+    public static String getJsonResponse(URL queryURL) throws IOException {
+        String jsonResponse = "";
+
+        if (queryURL == null) {
+            return jsonResponse;
+        }
+
+        HttpURLConnection urlConnection = null;
+        InputStream connectionStream = null;
+
+        try {
+            urlConnection = (HttpURLConnection) queryURL.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setConnectTimeout(15000);
+            urlConnection.setReadTimeout(10000);
+            urlConnection.connect();
+
+            if (urlConnection.getResponseCode() == 200) {
+                connectionStream = urlConnection.getInputStream();
+                jsonResponse = readFromStream(connectionStream);
+            } else {
+                Log.e(EarthquakeActivity.LOG_TAG, "URL Connection Error Code "
+                        + urlConnection.getResponseCode());
+            }
+        } catch (IOException e) {
+            Log.e(EarthquakeActivity.LOG_TAG, "Error while connecting to the Internet", e);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (connectionStream != null) {
+                connectionStream.close();
+            }
+        }
+
+        return jsonResponse;
+    }
 }
